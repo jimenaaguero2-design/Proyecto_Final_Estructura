@@ -1,19 +1,84 @@
-// Gestor_de_agenda_de_contactos.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
-
 #include <iostream>
+#include <string>
+#include <limits>
+using namespace std; 
 
-int main()
-{
-    std::cout << "Hello World!\n";
+#define TAM 3
+
+struct Contacto { //Se realiza un contacto con los datos solicitado en el proyecto
+    string nombre;
+    string telefono;
+    string correo;
+};
+
+// Variables globales
+Contacto* arreglo;
+int capacidad = TAM;
+int cantidad = 0;
+
+// Función para crecer el arreglo
+void crecerArreglo() {
+    int nuevaCapacidad = capacidad * 2;
+    Contacto* nuevo = new Contacto[nuevaCapacidad];
+
+    for (int i = 0; i < cantidad; i++) {
+        nuevo[i] = arreglo[i];   // Copiamos datos
+    }
+
+    delete[] arreglo;           // Borramos el anterior
+    arreglo = nuevo;            // Apuntamos al nuevo
+    capacidad = nuevaCapacidad;
 }
 
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
+// Función para agregar
+void agregarContacto() {
+    if (cantidad == capacidad) {
+        crecerArreglo();   // Si se llena, crece
+    }
 
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
+    cout << "Digite un nombre: ";
+    cin >> arreglo[cantidad].nombre;
+    cout << "Digite un numero de telefono: ";
+    cin >> arreglo[cantidad].telefono;
+    cout << "Digite un correo electronico: ";
+    cin >> arreglo[cantidad].correo;
+    cantidad++;
+    cout << "\nSe ingresaron los datos de manera correcta...\n";
+}
+
+// Función para mostrar
+void mostrarContactos() {
+    cout << "\n----CONTACTOS REGISTRADOS----\n";
+    for (int i = 0; i < cantidad; i++) {
+        cout << arreglo[i].nombre << endl;
+        cout << arreglo[i].telefono << endl;
+        cout << arreglo[i].correo << endl;
+        cout << "---------------------------\n";
+    }
+}
+
+int main() {
+    arreglo = new Contacto[capacidad];  // Creamos el arreglo dinámico
+
+    int op;
+    do {
+        cout << "\n------MENU-----\n";
+        cout << "1. Agregar contacto\n";
+        cout << "2. Mostrar contactos\n";
+        cout << "3. Salir\n";
+        cout << "Opcion: ";
+        cin >> op;
+
+        switch (op) {
+        case 1:
+            agregarContacto();
+            break;
+        case 2:
+            mostrarContactos();
+            break;
+        }
+    } while (op != 3);
+    cout << "Usted está saliendo del programa...";
+    delete[] arreglo;   // Liberamos memoria al final
+    return 0;
+}
