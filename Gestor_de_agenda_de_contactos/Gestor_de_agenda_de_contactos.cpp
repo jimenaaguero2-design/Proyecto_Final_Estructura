@@ -5,7 +5,7 @@ using namespace std;
 
 #define TAM 3
 
-struct Contacto { //Se realiza un contacto con los datos solicitado en el proyecto
+struct Contacto { //Se realiza un contacto con los datos solicitados en el proyecto
     string nombre;
     string telefono;
     string correo;
@@ -57,6 +57,21 @@ void mostrarContactos() {
     }
 }
 
+void ordenarPorNombre() { // Función para ordenar los nombres de manera alfabetica 
+
+    if (cantidad < 2) { cout << "\nNo hay suficientes contactos para ordenar...\n"; return; }
+    for (int i = 0; i < cantidad - 1; i++) {
+        for (int j = 0; j < cantidad - i - 1; j++) {
+            if (arreglo[j + 1].nombre < arreglo[j].nombre) {
+                Contacto tmp = arreglo[j];
+                arreglo[j] = arreglo[j + 1];
+                arreglo[j + 1] = tmp;
+            }
+        }
+    }
+    cout << "\nSe ordenaron los contactos alfabeticamente...\n";
+}
+
 int main() {
     arreglo = new Contacto[capacidad];  // Creamos el arreglo dinámico
 
@@ -65,7 +80,8 @@ int main() {
         cout << "\n------MENU-----\n";
         cout << "1. Agregar contacto\n";
         cout << "2. Mostrar contactos\n";
-        cout << "3. Salir\n";
+        cout << "3. Ordenar por nombre\n";
+        cout << "4. Salir\n";
         cout << "Por favor, seleccione una opcion: ";
         cin >> op;
 
@@ -76,9 +92,16 @@ int main() {
         case 2:
             mostrarContactos();
             break;
+        case 3:
+            ordenarPorNombre();
+            break;
+        case 4:
+            cout << "\nUsted esta saliendo del programa...\n";
+            break;
         }
-    } while (op != 3);
-    cout << "\nUsted esta saliendo del programa...\n";
-    delete[] arreglo;   // Liberamos memoria al final
+
+    } while (op != 4);
+
+    delete[] arreglo; // Liberamos memoria al final
     return 0;
 }
