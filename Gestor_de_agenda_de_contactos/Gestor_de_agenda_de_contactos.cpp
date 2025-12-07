@@ -66,7 +66,7 @@ int main() {
         cout << "1. Agregar contacto\n";
         cout << "2. Mostrar contactos\n";
         cout << "3. Salir\n";
-        cout << "Opcion: ";
+        cout << "Por favor, seleccione una opcion: ";
         cin >> op;
 
         switch (op) {
@@ -78,7 +78,7 @@ int main() {
             break;
         }
     } while (op != 3);
-    cout << "Usted esta saliendo del programa...\n";
+    cout << "\nUsted esta saliendo del programa...\n";
     delete[] arreglo;   // Liberamos memoria al final
     return 0;
 }
