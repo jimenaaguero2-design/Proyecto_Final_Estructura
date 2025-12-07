@@ -30,22 +30,6 @@ void CrecerArreglo() {
     capacidad = nuevaCapacidad;
 }
 
-// Función para agregar
-void AgregarContacto() {
-    if (cantidad == capacidad) {
-        CrecerArreglo();   // Si se llena, crece
-    }
-
-    cout << "Digite un nombre: ";
-    cin >> arreglo[cantidad].nombre;
-    cout << "Digite un numero de telefono: ";
-    cin >> arreglo[cantidad].telefono;
-    cout << "Digite un correo electronico: ";
-    cin >> arreglo[cantidad].correo;
-    cantidad++;
-    cout << "\nSe ingresaron los datos de manera correcta...\n";
-}
-
 // Función para mostrar
 void MostrarContactos() {
     cout << "\n----CONTACTOS REGISTRADOS----\n";
@@ -90,10 +74,83 @@ int BusquedaBinariaNombre(string nombre) { // Función para buscar de manera bin
     return -1;
 }
 
+struct Nodo {
+    Contacto dato;
+    Nodo* siguiente;
+};
+
+Nodo* lista = NULL; // lista enlazada global
+
+void InsertarEnLista(Contacto c) {
+    Nodo* nuevo = new Nodo();
+    nuevo->dato = c;
+    nuevo->siguiente = lista;
+    lista = nuevo;
+}
+
+void MostrarLista() {
+    Nodo* actual = lista;
+    cout << "\n---- LISTA ENLAZADA ----\n";
+    while (actual != NULL) {
+        cout << actual->dato.nombre << endl;
+        cout << actual->dato.telefono << endl;
+        cout << actual->dato.correo << endl;
+        cout << "---------------------------\n";
+        actual = actual->siguiente;
+    }
+}
+
+void EliminarNodo(string nombre) {
+    if (lista == NULL) {
+        cout << "La lista esta vacia.\n";
+        return;
+    }
+
+    Nodo* auxiliar = lista;
+    Nodo* anterior = NULL;
+
+    while (auxiliar != NULL && auxiliar->dato.nombre != nombre) {
+        anterior = auxiliar;
+        auxiliar = auxiliar->siguiente;
+    }
+
+    if (auxiliar == NULL) {
+        cout << "No se encontro el contacto en la lista...\n";
+        return;
+    }
+
+    if (anterior == NULL) {
+        lista = auxiliar->siguiente;
+    }
+    else {
+        anterior->siguiente = auxiliar->siguiente;
+    }
+
+    delete auxiliar;
+    cout << "\nSe ha eliminado el contcato de manera correcta con lista enlazada...\n";
+}
+
+// Función para agregar
+void AgregarContacto() {
+    if (cantidad == capacidad) {
+        CrecerArreglo();   // Si se llena, crece
+    }
+
+    cout << "Digite un nombre: ";
+    cin >> arreglo[cantidad].nombre;
+    cout << "Digite un numero de telefono: ";
+    cin >> arreglo[cantidad].telefono;
+    cout << "Digite un correo electronico: ";
+    cin >> arreglo[cantidad].correo;
+
+    InsertarEnLista(arreglo[cantidad]);
+
+    cantidad++;
+    cout << "\nSe ingresaron los datos de manera correcta...\n";
+}
 
 int main() {
     arreglo = new Contacto[capacidad];  // Creamos el arreglo dinámico
-
     int op;
     int secu;
     int bina;
@@ -105,7 +162,9 @@ int main() {
         cout << "3. Ordenar por nombre\n";
         cout << "4. Buscar por nombre de manera secuencial\n";
         cout << "5. Buscar por nombre de manera binaria\n";
-        cout << "6. Salir\n";
+        cout << "6. Eliminar contacto con lista enlazada\n";
+        cout << "7. Mostrar lista enlazada\n";
+        cout << "8. Salir\n";
         cout << "------------------------------------------\n";
         cout << "Por favor, seleccione una opcion: ";
         cin >> op;
@@ -143,13 +202,20 @@ int main() {
                 cout << "\nNo se encontro el contacto...\n";
             }
             break;
-
         case 6:
+            cout << "Digite el nombre a eliminar: ";
+            cin >> nombre;
+            EliminarNodo(nombre);
+            break;
+        case 7:
+            MostrarLista();
+            break;
+        case 8:
             cout << "\nUsted esta saliendo del programa...\n";
             break;
         }
 
-    } while (op != 6);
+    } while (op != 8);
 
     delete[] arreglo; // Liberamos memoria al final
     return 0;
