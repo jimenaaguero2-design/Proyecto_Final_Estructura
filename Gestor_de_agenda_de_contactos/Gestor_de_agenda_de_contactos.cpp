@@ -78,7 +78,7 @@ int main() {
             break;
         }
     } while (op != 3);
-    cout << "Usted está saliendo del programa...";
+    cout << "Usted esta saliendo del programa...\n";
     delete[] arreglo;   // Liberamos memoria al final
     return 0;
 }
