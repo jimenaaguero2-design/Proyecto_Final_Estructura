@@ -74,6 +74,30 @@ int BusquedaBinariaNombre(string nombre) { // Función para buscar de manera bin
     return -1;
 }
 
+struct NodoPila {
+    string accion;
+    NodoPila* siguiente;
+};
+
+NodoPila* pila = NULL;
+
+void Push(string accion) {
+    NodoPila* nuevo = new NodoPila();
+    nuevo->accion = accion;
+    nuevo->siguiente = pila;
+    pila = nuevo;
+}
+
+void MostrarHistorial() { // Se encarga de mostrar el historial
+    NodoPila* actual = pila;
+    cout << "\n---- HISTORIAL DE OPERACIONES ----\n";
+    while (actual != NULL) {
+        cout << actual->accion << endl;
+        cout << "---------------------------\n";
+        actual = actual->siguiente;
+    }
+}
+
 struct Nodo {
     Contacto dato;
     Nodo* siguiente;
@@ -88,7 +112,7 @@ void InsertarEnLista(Contacto c) {
     lista = nuevo;
 }
 
-void MostrarLista() {
+void MostrarLista() { 
     Nodo* actual = lista;
     cout << "\n---- LISTA ENLAZADA ----\n";
     while (actual != NULL) {
@@ -126,11 +150,12 @@ void EliminarNodo(string nombre) {
         anterior->siguiente = auxiliar->siguiente;
     }
 
+    cout << "\nSe ha eliminado el contacto de manera correcta con lista enlazada...\n";
+    Push("\nSe elimino el contacto: " + auxiliar->dato.nombre);
     delete auxiliar;
-    cout << "\nSe ha eliminado el contcato de manera correcta con lista enlazada...\n";
 }
 
-// Función para agregar
+// Función para agregar contactos al sistema
 void AgregarContacto() {
     if (cantidad == capacidad) {
         CrecerArreglo();   // Si se llena, crece
@@ -147,6 +172,8 @@ void AgregarContacto() {
 
     cantidad++;
     cout << "\nSe ingresaron los datos de manera correcta...\n";
+
+    Push("\nSe agrego el contacto: " + arreglo[cantidad - 1].nombre);
 }
 
 int main() {
@@ -156,7 +183,7 @@ int main() {
     int bina;
     string nombre;
     do {
-        cout << "================ MENU ====================\n";
+        cout << "\n================ MENU ====================\n";
         cout << "1. Agregar contacto\n";
         cout << "2. Mostrar contactos\n";
         cout << "3. Ordenar por nombre\n";
@@ -164,7 +191,8 @@ int main() {
         cout << "5. Buscar por nombre de manera binaria\n";
         cout << "6. Eliminar contacto con lista enlazada\n";
         cout << "7. Mostrar lista enlazada\n";
-        cout << "8. Salir\n";
+        cout << "8. Mostrar historial de operaciones\n";
+        cout << "9. Salir\n";
         cout << "------------------------------------------\n";
         cout << "Por favor, seleccione una opcion: ";
         cin >> op;
@@ -211,11 +239,14 @@ int main() {
             MostrarLista();
             break;
         case 8:
+            MostrarHistorial();
+            break;
+        case 9:
             cout << "\nUsted esta saliendo del programa...\n";
             break;
         }
 
-    } while (op != 8);
+    } while (op != 9);
 
     delete[] arreglo; // Liberamos memoria al final
     return 0;
