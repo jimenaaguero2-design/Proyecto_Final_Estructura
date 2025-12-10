@@ -176,12 +176,70 @@ void AgregarContacto() {
     Push("\nSe agrego el contacto: " + arreglo[cantidad - 1].nombre);
 }
 
+struct NodoCola {
+    Contacto dato;
+    NodoCola* siguiente;
+};
+
+NodoCola* frente = NULL; // Es el inicio de la cola
+NodoCola* fin = NULL;    // Es el final de la cola
+
+
+void EncolarPendiente(Contacto c) {
+    NodoCola* nuevo = new NodoCola();
+    nuevo->dato = c;
+    nuevo->siguiente = NULL;
+    if (fin == NULL) {
+        frente = fin = nuevo;
+    }
+    else {
+        fin->siguiente = nuevo;
+        fin = nuevo;
+    }
+    cout << "Se ha encolado el contacto correctamente, quedando como pendiente...\n";
+}
+
+void TransferirPendientesAlArreglo() {
+    while (frente != NULL) {
+        
+        Contacto c = frente->dato; //Se toma rl contacto como pendiente
+
+        
+        if (cantidad == capacidad) { //Se pasa el mismo al arreglo princípal, en donde guardamos los contactos
+            CrecerArreglo();
+        }
+        arreglo[cantidad] = c;
+        cantidad++;
+
+        
+        NodoCola* temp = frente; //Nos permite eliminar de la cola
+        frente = frente->siguiente;
+        if (frente == NULL) fin = NULL;
+        delete temp;
+    }
+    cout << "Los contactos pendientes fueron transferidos al arreglo...\n";
+}
+
+void MostrarColaPendientes() {
+    NodoCola* actual = frente;
+    cout << "\n---- COLA DE CONTACTOS PENDIENTES ----\n";
+    while (actual != NULL) {
+        cout << actual->dato.nombre << endl;
+        cout << actual->dato.telefono << endl;
+        cout << actual->dato.correo << endl;
+        cout << "---------------------------\n";
+        actual = actual->siguiente;
+    }
+}
+
+
 int main() {
     arreglo = new Contacto[capacidad];  // Creamos el arreglo dinámico
     int op;
     int secu;
     int bina;
     string nombre;
+    Contacto c;
     do {
         cout << "\n================ MENU ====================\n";
         cout << "1. Agregar contacto\n";
@@ -192,7 +250,10 @@ int main() {
         cout << "6. Eliminar contacto con lista enlazada\n";
         cout << "7. Mostrar lista enlazada\n";
         cout << "8. Mostrar historial de operaciones\n";
-        cout << "9. Salir\n";
+        cout << "9. Encolar contactos pendientes\n";
+        cout << "10. Mostrar cola de pendientes\n";
+        cout << "11. Trasferir pendientes al arreglo dinamico\n";
+        cout << "12. Salir\n";
         cout << "------------------------------------------\n";
         cout << "Por favor, seleccione una opcion: ";
         cin >> op;
@@ -242,11 +303,26 @@ int main() {
             MostrarHistorial();
             break;
         case 9:
+            cout << "Digite un nombre: ";
+            cin >> c.nombre;
+            cout << "Digite un numero de telefono: ";
+            cin >> c.telefono;
+            cout << "Digite un correo electronico: ";
+            cin >> c.correo;
+            EncolarPendiente(c);
+            break;
+        case 10:
+            MostrarColaPendientes();
+            break;
+        case 11:
+            TransferirPendientesAlArreglo();
+            break;
+        case 12:
             cout << "\nUsted esta saliendo del programa...\n";
             break;
         }
 
-    } while (op != 9);
+    } while (op != 12);
 
     delete[] arreglo; // Liberamos memoria al final
     return 0;
