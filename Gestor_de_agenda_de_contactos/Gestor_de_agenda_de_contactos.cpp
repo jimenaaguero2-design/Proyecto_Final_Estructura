@@ -232,6 +232,51 @@ void MostrarColaPendientes() {
     }
 }
 
+struct NodoArbol {
+    Contacto dato;
+    NodoArbol* izquierda;
+    NodoArbol* derecha;
+};
+
+NodoArbol* raiz = NULL;
+
+NodoArbol* InsertarArbol(NodoArbol* nodo, Contacto c) {
+    if (nodo == NULL) {
+        NodoArbol* nuevo = new NodoArbol();
+        nuevo->dato = c;
+        nuevo->izquierda = nuevo->derecha = NULL;
+        return nuevo;
+    }
+    if (c.nombre < nodo->dato.nombre) {
+        nodo->izquierda = InsertarArbol(nodo->izquierda, c);
+    }
+    else {
+        nodo->derecha = InsertarArbol(nodo->derecha, c);
+    }
+    return nodo;
+}
+
+void MostrarArbol(NodoArbol* nodo) {
+    if (nodo != NULL) {
+        MostrarArbol(nodo->izquierda);
+        cout <<"\nEl nombre es: " << nodo->dato.nombre << " - "
+            << "Telefono: " << nodo->dato.telefono << " - "
+            << "Correo: " << nodo->dato.correo << endl;
+        MostrarArbol(nodo->derecha);
+    }
+}
+
+NodoArbol* BuscarArbol(NodoArbol* nodo, string nombre) {
+    if (nodo == NULL || nodo->dato.nombre == nombre) {
+        return nodo;
+    }
+    if (nombre < nodo->dato.nombre) {
+        return BuscarArbol(nodo->izquierda, nombre);
+    }
+    else {
+        return BuscarArbol(nodo->derecha, nombre);
+    }
+}
 
 int main() {
     arreglo = new Contacto[capacidad];  // Creamos el arreglo dinámico
@@ -253,7 +298,10 @@ int main() {
         cout << "9. Encolar contactos pendientes\n";
         cout << "10. Mostrar cola de pendientes\n";
         cout << "11. Trasferir pendientes al arreglo dinamico\n";
-        cout << "12. Salir\n";
+        cout << "12. Insertar contacto en el arbol\n";
+        cout << "13. Mostrar arbol en inorden\n";
+        cout << "14. Buscar contacto en arbol\n";
+        cout << "15. Salir\n";
         cout << "------------------------------------------\n";
         cout << "Por favor, seleccione una opcion: ";
         cin >> op;
@@ -318,11 +366,35 @@ int main() {
             TransferirPendientesAlArreglo();
             break;
         case 12:
+            raiz = InsertarArbol(raiz, arreglo[cantidad - 1]); // ejemplo: último agregado
+            cout << "\nSe inserto de manera correcta en el arbol...\n";
+            break;
+        case 13:
+            cout << "\n---- ARBOL BINARIO DE CONTACTOS ----\n";
+            MostrarArbol(raiz);
+            break;
+        case 14:
+            cout << "Digite el nombre a buscar en el arbol: ";
+            cin >> nombre;
+            {
+                NodoArbol* resultado = BuscarArbol(raiz, nombre);
+                if (resultado != NULL) {
+                    cout << "Se ha encontrado a: " << resultado->dato.nombre
+                        << ", Telefono: " << resultado->dato.telefono
+                        << ", Correo: " << resultado->dato.correo << endl;
+                }
+                else {
+                    cout << "\nNo se encontro el contacto en el arbol...\n";
+                }
+            }
+            break;
+
+        case 15:
             cout << "\nUsted esta saliendo del programa...\n";
             break;
         }
 
-    } while (op != 12);
+    } while (op != 15);
 
     delete[] arreglo; // Liberamos memoria al final
     return 0;
