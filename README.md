@@ -1,5 +1,6 @@
 # Proyecto_Final_Estructura
 Nombre del proyecto: Gestor de Agenda de Contactos
+
 Descripción:
 El desarrollo de soluciones informáticas orientadas a la gestión y organización de información es esencial en el ámbito de la Ingeniería en Sistemas. Asimismo, el proyecto promueve el uso de estructuras como arreglos dinámicos, listas enlazadas, pilas, colas y árboles binarios de búsqueda, las cuales son sumamente importantes para la organización y manipulación de la información de manera eficiente. Además, se incorporan métodos de ordenamiento y técnicas de búsqueda, los cuales permiten trabajar con la información de forma estructurada, logrando de esta manera una optimización en las operaciones realizadas dentro del sistema.
 
